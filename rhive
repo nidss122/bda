@@ -1,0 +1,28 @@
+install.packages(dplyr)
+install.packages(readr)
+install.packages(plotly)
+install.packages(ggplot2)
+library(dplyr)
+library(readr)
+library(plotly)
+library(ggplot2)
+
+data <- read_csv("C:/Users/patil/OneDrive/Documents/Electric_Vehicle_Population_Data.csv")
+spec(data)
+
+scatter_plot <- ggplot(data, aes(x = `Model Year`, y = `Electric Range`)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Electric Vehicles", x = "Model Year", y = "Electric Range (miles)")
+
+interactive_scatter <- ggplotly(scatter_plot)
+
+interactive_scatter 
+
+bubble_chart <- ggplot(data, aes(x = `Model Year`, y = `Electric Range`, size = `Base MSRP`, color = Make)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Bubble Chart of Electric Vehicles", x = "Model Year", y = "Electric Range (miles)", size = "Base MSRP", color = "Vehicle Make")
+
+
+interactive_bubble <- ggplotly(bubble_chart)
+
+interactive_bubble
