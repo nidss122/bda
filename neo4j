@@ -1,0 +1,23 @@
+CREATE (:Person {name: "john"})
+
+MATCH (p:Person {name: "john"}) RETURN p
+
+CREATE ( :Person {name: "john"}),
+( :Person {name: "jane"}),
+(:Product {productname: "laptop"}),
+(:Place {location: "mumbai"})
+
+CREATE ( :Person {name: "john"}),
+(:Book{title:"the great gatsby"})
+
+MATCH (person:Person {name:"john"})
+MATCH (book:Book{title:"the great gatsby"})
+CREATE (person)-[:READS]->(book)
+
+MATCH (person:Person {name:"john"}) - [r:READS]-> (book:Book{title:"the great gatsby"})
+RETURN person, r, book
+
+MATCH (p:Person {name:"john"}) DETACH DELETE p
+
+MATCH (person:Person {name:"john"}) - [r:READS]-> (book:Book{title:"the great gatsby"})
+DELETE r
