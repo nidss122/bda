@@ -1,0 +1,33 @@
+from pyspark.sql import SparkSession
+
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("Titanic Data Analysis") \
+    .getOrCreate()
+# Load Titanic dataset (replace with the correct path if necessary)
+data = spark.read.csv('Titanic-Dataset.csv', header=True, inferSchema=True)
+
+# Show the first few rows of the data
+data.show(5)
+
+# Exploratory Data Analysis (EDA)
+# Print the schema of the dataset
+data.printSchema()
+
+# Basic descriptive statistics
+data.describe().show()
+
+# Group by a specific column (for example, 'Sex' or 'Pclass')
+data.groupBy('Sex').count().show()
+data.groupBy('Pclass').count().show()
+
+# Filter data (for example, passengers with 'Fare' greater than 100)
+filtered_data = data.filter(data['Fare'] > 100)
+filtered_data.show()
+
+# SQL Queries (optional - using Spark SQL)
+data.createOrReplaceTempView('titanic_data')
+spark.sql("SELECT Sex, AVG(Age) AS Avg_Age FROM titanic_data GROUP BY Sex").show()
+spark.sql("SELECT Pclass, SUM(Fare) AS Total_Fare FROM titanic_data GROUP BY Pclass").show()
+# Stop the Spark session
+spark.stop()
