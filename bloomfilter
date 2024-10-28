@@ -1,0 +1,40 @@
+import hashlib
+import math
+
+class BloomFilter:
+    def __init__(self, size, hash_count):
+        self.size = size
+        self.hash_count = hash_count
+        self.bit_array = [0] * size
+
+    def _hashes(self, item):
+        result = []
+        for i in range(self.hash_count):
+            # Using hashlib to generate hash functions (SHA-256 as an example)
+            hash_result = int(hashlib.sha256(f"{item}{i}".encode()).hexdigest(), 16)
+            result.append(hash_result % self.size)
+        return result
+
+    def add(self, item):
+        for hash_val in self._hashes(item):
+            self.bit_array[hash_val] = 1
+
+    def check(self, item):
+        for hash_val in self._hashes(item):
+            if self.bit_array[hash_val] == 0:
+                return False
+        return True
+
+if __name__ == "__main__":
+    # Define the size of the Bloom filter and number of hash functions
+    bloom = BloomFilter(size=100, hash_count=5)
+
+    # Add elements to the Bloom filter
+    bloom.add("apple")
+    bloom.add("banana")
+    bloom.add("orange")
+
+    # Check membership
+    print("apple in filter:", bloom.check("apple"))  
+    print("banana in filter:", bloom.check("banana")) 
+    print("grape in filter:", bloom.check("grape"))
