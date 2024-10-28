@@ -1,0 +1,23 @@
+install.packages("igraph")
+install.packages("tidyverse")
+install.packages("RColorBrewer")
+ library(igraph)
+library(RColorBrewer)
+ library(tidyverse)
+edges <- c("A","B","A","C","B","C","B","D", "C","D","E","F","E","G","F","G", "F", "H", "G", "H")
+g <- graph(edges , directed = FALSE)
+ plot(g)
+louvain_communities <- cluster_louvain(g)
+print(louvain_communities)
+
+V(g)$color <- brewer.pal(length(unique(membership(louvain_communities))),"Set3") [membership(louvain_communities)]
+
+plot(g,vertex.color = V(g)$color, vertex.label = V(g)$name, main = "Louvain Community Detection")
+
+sizes(louvain_communities)
+ membership(louvain_communities)
+modularity(louvain_communities)
+
+community_membership <- membership(louvain_communities)
+community_groups <- split(V(g)$name, community_membership)
+print(community_groups)
